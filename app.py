@@ -15,6 +15,9 @@ from streamlit_folium import st_folium
 st.set_page_config(page_title="Wildfire Detector", layout="wide")
 st.title("🛰️ Wildfire Detection Dashboard")
 
+# API Keys
+GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"
+
 # Load model once
 @st.cache_resource
 def load_cnn_model():
@@ -51,6 +54,13 @@ def predict():
     prediction = model.predict(image_array)[0][0]
     return "🔥 Wildfire Confirmed!" if prediction > 0.5 else "🌿 No Wildfire Detected"
 
+# Get nearby places from Google Places API
+def get_nearby_services(lat, lon, service_type):
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lon}&radius=50000&type={service_type}&key={GOOGLE_API_KEY}"
+    response = requests.get(url)
+    data = response.json()
+    return [place["name"] for place in data.get("results", [])][:5]  # Top 5 results
+
 # Display Results
 if os.path.exists("wildfire_real_time.jpg"):
     col1, col2 = st.columns([1, 1])
@@ -71,5 +81,24 @@ if os.path.exists("wildfire_real_time.jpg"):
     st.subheader("🤖 Prediction Result")
     result = predict()
     st.success(result)
+
+    st.subheader("📍 Nearby Emergency Services")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("🚒 **Fire Stations**")
+        for station in get_nearby_services(lat, lon, "fire_station"):
+            st.write(f"• {station}")
+
+    with col2:
+        st.markdown("🏥 **Hospitals**")
+        for hospital in get_nearby_services(lat, lon, "hospital"):
+            st.write(f"• {hospital}")
+
+    with col3:
+        st.markdown("🚔 **Police Stations**")
+        for police in get_nearby_services(lat, lon, "police"):
+            st.write(f"• {police}")
 else:
     st.error("Satellite image could not be fetched.")
