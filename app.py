@@ -54,19 +54,12 @@ def predict():
     prediction = model.predict(image_array)[0][0]
     return "🔥 Wildfire Confirmed!" if prediction > 0.5 else "🌿 No Wildfire Detected"
 
-# Get nearby places with Google Maps links
+# Get nearby places from Google Places API
 def get_nearby_services(lat, lon, service_type):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lon}&radius=50000&type={service_type}&key={GOOGLE_API_KEY}"
     response = requests.get(url)
     data = response.json()
-    services = []
-    for place in data.get("results", [])[:5]:
-        name = place["name"]
-        place_lat = place["geometry"]["location"]["lat"]
-        place_lon = place["geometry"]["location"]["lng"]
-        maps_link = f"https://www.google.com/maps/dir/?api=1&destination={place_lat},{place_lon}"
-        services.append((name, maps_link))
-    return services
+    return [place["name"] for place in data.get("results", [])][:5]  # Top 5 results
 
 # Display Results
 if os.path.exists("wildfire_real_time.jpg"):
@@ -95,17 +88,17 @@ if os.path.exists("wildfire_real_time.jpg"):
 
     with col1:
         st.markdown("🚒 **Fire Stations**")
-        for name, link in get_nearby_services(lat, lon, "fire_station"):
-            st.markdown(f"• [{name}]({link})")
+        for station in get_nearby_services(lat, lon, "fire_station"):
+            st.write(f"• {station}")
 
     with col2:
         st.markdown("🏥 **Hospitals**")
-        for name, link in get_nearby_services(lat, lon, "hospital"):
-            st.markdown(f"• [{name}]({link})")
+        for hospital in get_nearby_services(lat, lon, "hospital"):
+            st.write(f"• {hospital}")
 
     with col3:
         st.markdown("🚔 **Police Stations**")
-        for name, link in get_nearby_services(lat, lon, "police"):
-            st.markdown(f"• [{name}]({link})")
+        for police in get_nearby_services(lat, lon, "police"):
+            st.write(f"• {police}")
 else:
     st.error("Satellite image could not be fetched.")
