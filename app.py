@@ -27,8 +27,12 @@ def load_cnn_model():
 fire_data = pd.read_csv("archived_fire.csv")
 selected_fire = fire_data.iloc[0]
 
-lat = float(selected_fire["latitude"])
-lon = float(selected_fire["longitude"])
+try:
+    lat = float(str(selected_fire["latitude"]).strip())
+    lon = float(str(selected_fire["longitude"]).strip())
+except ValueError:
+    st.error("❌ Invalid coordinates in archived_fire.csv.")
+    st.stop()
 
 
 # Fetch satellite image from NASA API
