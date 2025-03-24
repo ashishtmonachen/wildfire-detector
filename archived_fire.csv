@@ -1,2 +1,2 @@
 latitude,longitude,date,fire_name,status,area_burned_km2,start_date,containment,wind_direction,response_units
-41.727,-123.654,2025-03-23,Rattlesnake Fire,Active,24.8,2025-03-21,35%,NNE @ 12 km/h,CalFire, Forest Service
+41.727,-123.654,2025-03-23,Rattlesnake Fire,Active,24.8,2025-03-21,35%,NNE @ 12 km/h,"CalFire, Forest Service"
