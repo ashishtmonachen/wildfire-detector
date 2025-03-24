@@ -89,8 +89,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     result = predict()
     st.success(result)
 # 🔥 Wildfire Details Section
-    
-    if "fire_name" in selected_fire:
+if "fire_name" in selected_fire:
     st.subheader("🔥 Wildfire Details")
     st.markdown(f"""
 **Fire Name**: {selected_fire.get("fire_name", "N/A")}  
