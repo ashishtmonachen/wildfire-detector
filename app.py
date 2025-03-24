@@ -15,8 +15,8 @@ st.set_page_config(page_title="Wildfire Detector", layout="wide")
 st.title("🛰️ Wildfire Detection Dashboard")
 
 # API Keys
-GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"  # Replace with your key
-NASA_API_KEY = "sE98DPEqgN0f7dfmi14gEpcPqE2LNeK4JCIgNk7Z"      # Replace with your key
+GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"  
+NASA_API_KEY = "sE98DPEqgN0f7dfmi14gEpcPqE2LNeK4JCIgNk7Z"      
 
 # Load model once
 @st.cache_resource
