@@ -88,6 +88,19 @@ if os.path.exists("wildfire_real_time.jpg"):
     st.subheader("🤖 Prediction Result")
     result = predict()
     st.success(result)
+# 🔥 Wildfire Details Section
+    
+    if "fire_name" in selected_fire:
+    st.subheader("🔥 Wildfire Details")
+    st.markdown(f"""
+**Fire Name**: {selected_fire.get("fire_name", "N/A")}  
+**Status**: {selected_fire.get("status", "N/A")}  
+**Area Burned**: {selected_fire.get("area_burned_km2", "N/A")} km²  
+**Start Date**: {selected_fire.get("start_date", "N/A")}  
+**Containment**: {selected_fire.get("containment", "N/A")}  
+**Wind Direction**: {selected_fire.get("wind_direction", "N/A")}  
+**Responding Units**: {selected_fire.get("response_units", "N/A")}
+""")
 
     st.subheader("📍 Nearby Emergency Services")
 
