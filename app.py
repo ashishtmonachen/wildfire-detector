@@ -27,8 +27,9 @@ def load_cnn_model():
 fire_data = pd.read_csv("archived_fire.csv")
 selected_fire = fire_data.iloc[0]
 
-lat = selected_fire["latitude"]
-lon = selected_fire["longitude"]
+lat = float(selected_fire["latitude"])
+lon = float(selected_fire["longitude"])
+
 
 # Fetch satellite image from NASA API
 def fetch_satellite_image(lat, lon):
