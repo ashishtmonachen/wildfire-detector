@@ -13,6 +13,20 @@ from streamlit_extras.colored_header import colored_header
 
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
+
+# 🔻 Add background logo (watermark style)
+st.markdown("""
+    <style>
+        .stApp {
+            background-image: url('https://i.imgur.com/BczFazY.png');
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            background-size: 200px;
+            opacity: 1;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
 
 # API Keys
@@ -83,12 +97,11 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.metric(label="Longitude", value=f"{lon:.4f}")
             st.metric(label="Captured Date", value=date_captured)
             m = folium.Map(
-                            location=[lat, lon],
-                            zoom_start=6,
-                            tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            attr="Map data © [OpenStreetMap](https://www.openstreetmap.org) contributors"
-                        )
-
+                location=[lat, lon],
+                zoom_start=6,
+                tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                attr="Map data © [OpenStreetMap](https://www.openstreetmap.org) contributors"
+            )
             folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red")).add_to(m)
             st_folium(m, width=600, height=400)
 
