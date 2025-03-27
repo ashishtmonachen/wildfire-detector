@@ -115,7 +115,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.markdown("### 🛰️ Satellite Image")
             st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
 
-    st.markdown("## 🧠 AI Prediction")
+    st.markdown("## 🧠 Model Prediction")
     result = predict()
     st.success(result)
 
