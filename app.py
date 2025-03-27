@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import folium
 from streamlit_folium import st_folium
 from streamlit_extras.colored_header import colored_header
-from branca.element import Element, MacroElement
+from branca.element import MacroElement
 from jinja2 import Template
 
 # Sci-fi Theme Setup
@@ -95,7 +95,7 @@ class Legend(MacroElement):
             🚔 Police
         </div>
         {% endmacro %}
-        ")
+        """)
 
 # Main Display
 if os.path.exists("wildfire_real_time.jpg"):
@@ -121,7 +121,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     result = predict()
     st.success(result)
 
-       st.markdown("## 🔥 Wildfire Metadata")
+    st.markdown("## 🔥 Wildfire Metadata")
     st.markdown(f"""
 - **Fire Name**: `{selected_fire.get('fire_name', 'N/A')}`  
 - **Status**: `{selected_fire.get('status', 'N/A')}`  
