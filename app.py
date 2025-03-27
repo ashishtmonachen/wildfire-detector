@@ -129,7 +129,7 @@ if os.path.exists("wildfire_real_time.jpg"):
 - **Containment**: `{selected_fire.get('containment', 'N/A')}`  
 - **Wind**: `{selected_fire.get('wind_direction', 'N/A')}`  
 - **Responders**: `{selected_fire.get('response_units', 'N/A')}`
-""")
+                """)
 
 
     st.markdown("## 🚨 Nearby Emergency Services")
