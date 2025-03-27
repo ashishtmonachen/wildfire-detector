@@ -10,14 +10,16 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import folium
 from streamlit_folium import st_folium
 from streamlit_extras.colored_header import colored_header
-from streamlit_extras.let_it_rain import rain
+
+# Sci-fi Theme Setup
+st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
+colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
 
 # API Keys
 GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"
 NASA_API_KEY = "sE98DPEqgN0f7dfmi14gEpcPqE2LNeK4JCIgNk7Z"
 
 @st.cache_resource
-
 def load_cnn_model():
     return load_model("nasa_wildfire_cnn.h5")
 
@@ -34,7 +36,6 @@ except ValueError:
 
 # Fetch satellite image
 @st.cache_data
-
 def fetch_satellite_image(lat, lon):
     for days_ago in range(10):
         date = (datetime.utcnow() - timedelta(days=days_ago)).strftime("%Y-%m-%d")
@@ -49,7 +50,6 @@ def fetch_satellite_image(lat, lon):
 date_captured = fetch_satellite_image(lat, lon)
 
 # Prediction
-
 def predict():
     image = load_img("wildfire_real_time.jpg", target_size=(128, 128))
     image_array = img_to_array(image) / 255.0
@@ -59,7 +59,6 @@ def predict():
     return "🔥 Wildfire Confirmed!" if prediction > 0.5 else "🌿 No Wildfire Detected"
 
 # Nearby services
-
 def get_nearby_services(lat, lon, service_type):
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lon}&radius=50000&type={service_type}&key={GOOGLE_API_KEY}"
     response = requests.get(url)
@@ -91,7 +90,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.markdown("### 🛰️ Satellite Image")
             st.image("wildfire_real_time.jpg", use_column_width=True, caption="Live NASA Feed")
 
-    st.markdown("## 🧐 AI Prediction")
+    st.markdown("## 🧠 AI Prediction")
     result = predict()
     st.success(result)
 
@@ -120,7 +119,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.markdown(f"- [{name}]({link})")
 
     with col3:
-        st.markdown("#### 🗬️ Police")
+        st.markdown("#### 🛡️ Police")
         for name, link in get_nearby_services(lat, lon, "police"):
             st.markdown(f"- [{name}]({link})")
 
