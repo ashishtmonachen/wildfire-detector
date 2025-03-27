@@ -12,11 +12,6 @@ from streamlit_folium import st_folium
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.let_it_rain import rain
 
-# Sci-fi Theme Setup
-st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
-colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
-rain(emoji="🔥", font_size=54, falling_speed=7, animation_length="infinite")
-
 # API Keys
 GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"
 NASA_API_KEY = "sE98DPEqgN0f7dfmi14gEpcPqE2LNeK4JCIgNk7Z"
