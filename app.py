@@ -14,7 +14,7 @@ from branca.element import MacroElement, Template, JavascriptLink
 
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
-colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
+colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires in the USA", color_name="red-70")
 
 # API Keys
 GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"
