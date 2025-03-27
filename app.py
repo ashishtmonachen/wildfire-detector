@@ -121,6 +121,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     result = predict()
     st.success(result)
 
+       st.markdown("## 🔥 Wildfire Metadata")
     st.markdown(f"""
 - **Fire Name**: `{selected_fire.get('fire_name', 'N/A')}`  
 - **Status**: `{selected_fire.get('status', 'N/A')}`  
@@ -129,8 +130,7 @@ if os.path.exists("wildfire_real_time.jpg"):
 - **Containment**: `{selected_fire.get('containment', 'N/A')}`  
 - **Wind**: `{selected_fire.get('wind_direction', 'N/A')}`  
 - **Responders**: `{selected_fire.get('response_units', 'N/A')}`
-                """)
-
+    """)
 
     st.markdown("## 🚨 Nearby Emergency Services")
     col1, col2, col3 = st.columns(3)
