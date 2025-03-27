@@ -6,3 +6,5 @@ Pillow
 tensorflow
 streamlit-folium
 folium
+streamlit-extras
+
