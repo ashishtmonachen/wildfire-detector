@@ -82,12 +82,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.metric(label="Latitude", value=f"{lat:.4f}")
             st.metric(label="Longitude", value=f"{lon:.4f}")
             st.metric(label="Captured Date", value=date_captured)
-           m = folium.Map(
-    location=[lat, lon],
-    zoom_start=6,
-    tiles="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
-    attr="Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors"
-)
+           m = folium.Map(location=[lat, lon],zoom_start=6,tiles="https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",attr="Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors")
 
             folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red")).add_to(m)
             st_folium(m, width=600, height=400)
