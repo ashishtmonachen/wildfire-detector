@@ -14,15 +14,12 @@ from streamlit_extras.colored_header import colored_header
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
 
-# 🔻 Add background logo (watermark style)
+# 🔻 Full background image styling
 st.markdown("""
     <style>
         .stApp {
-            background-image: url('https://i.imgur.com/BczFazY.png');
-            background-repeat: no-repeat;
-            background-position: bottom right;
-            background-size: 200px;
-            opacity: 1;
+            background: url('https://i.imgur.com/jzDDVfI.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
     </style>
 """, unsafe_allow_html=True)
