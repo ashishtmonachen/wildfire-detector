@@ -125,7 +125,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     st.markdown(f"""
     - **Fire Name**: `{selected_fire.get('fire_name', 'N/A')}`
     - **Status**: `{selected_fire.get('status', 'N/A')}`
-    - **Area Burned**: `{selected_fire.get('area_burned_km2', 'N/A')} km²`
+    - **Area Burned**: `{selected_fire.get('area_burned_km2', 'N/A')} km^2`
     - **Start Date**: `{selected_fire.get('start_date', 'N/A')}`
     - **Containment**: `{selected_fire.get('containment', 'N/A')}`
     - **Wind**: `{selected_fire.get('wind_direction', 'N/A')}`
