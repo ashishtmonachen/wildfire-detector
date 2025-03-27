@@ -70,44 +70,8 @@ def get_nearby_services(lat, lon, service_type):
         place_lat = place["geometry"]["location"]["lat"]
         place_lon = place["geometry"]["location"]["lng"]
         maps_link = f"https://www.google.com/maps/dir/?api=1&destination={place_lat},{place_lon}"
-        services.append((name, maps_link))
+        services.append((name, maps_link, place_lat, place_lon))
     return services
-
-# Interactive Legend with Toggle
-class Legend(MacroElement):
-    def __init__(self):
-        super().__init__()
-        self._template = Template("""
-        {% macro html(this, kwargs) %}
-        <style>
-        .legend-toggle {
-            position: fixed;
-            bottom: 50px;
-            left: 50px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            z-index: 9999;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .legend-details {
-            display: none;
-            margin-top: 10px;
-        }
-        </style>
-        <div class="legend-toggle" onclick="document.getElementById('legend-details').style.display = (document.getElementById('legend-details').style.display === 'none') ? 'block' : 'none'">
-            <b>Map Legend</b>
-            <div id="legend-details" class="legend-details">
-                🔴 Wildfire<br>
-                🔵 Fire Station<br>
-                🏥 Hospital<br>
-                🚔 Police
-            </div>
-        </div>
-        {% endmacro %}
-        """)
 
 # Main Display
 if os.path.exists("wildfire_real_time.jpg"):
@@ -121,8 +85,30 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.metric(label="Captured Date", value=date_captured)
 
             m = folium.Map(location=[lat, lon], zoom_start=6)
-            folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red")).add_to(m)
-            m.get_root().add_child(Legend())
+            wildfire_marker = folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red"))
+            wildfire_marker.add_to(m)
+
+            for service_type, icon_color in zip(["fire_station", "hospital", "police"], ["blue", "green", "purple"]):
+                services = get_nearby_services(lat, lon, service_type)
+                for name, link, s_lat, s_lon in services:
+                    folium.Marker([s_lat, s_lon], popup=name, icon=folium.Icon(color=icon_color)).add_to(m)
+
+            # Add interactive legend
+            legend_html = '''
+                <div id="map-legend" style="position: fixed; bottom: 50px; left: 50px; z-index:9999; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; color: white;">
+                    <b onclick=\"document.querySelector('#map-legend-details').style.display=(document.querySelector('#map-legend-details').style.display=='none'?'block':'none')\" style='cursor: pointer;'>Map Legend ⮟</b>
+                    <div id="map-legend-details" style="display:none; margin-top: 5px;">
+                        🔴 Wildfire<br>
+                        🔵 Fire Station<br>
+                        🏥 Hospital<br>
+                        🚔 Police
+                    </div>
+                </div>
+            '''
+            legend = MacroElement()
+            legend._template = Template(f"""{{% macro html(this, kwargs) %}}{legend_html}{{% endmacro %}}""")
+            m.get_root().add_child(legend)
+
             st_folium(m, width=600, height=400)
 
         with col2:
@@ -133,7 +119,6 @@ if os.path.exists("wildfire_real_time.jpg"):
     result = predict()
     st.success(result)
 
-    st.markdown("## 🔥 Wildfire Metadata")
     st.markdown(f"""
 - **Fire Name**: `{selected_fire.get('fire_name', 'N/A')}`  
 - **Status**: `{selected_fire.get('status', 'N/A')}`  
@@ -142,25 +127,15 @@ if os.path.exists("wildfire_real_time.jpg"):
 - **Containment**: `{selected_fire.get('containment', 'N/A')}`  
 - **Wind**: `{selected_fire.get('wind_direction', 'N/A')}`  
 - **Responders**: `{selected_fire.get('response_units', 'N/A')}`
-    """)
+""")
 
     st.markdown("## 🚨 Nearby Emergency Services")
     col1, col2, col3 = st.columns(3)
 
-    with col1:
-        st.markdown("#### 🚒 Fire Stations")
-        for name, link in get_nearby_services(lat, lon, "fire_station"):
-            st.markdown(f"- [{name}]({link})")
-
-    with col2:
-        st.markdown("#### 🏥 Hospitals")
-        for name, link in get_nearby_services(lat, lon, "hospital"):
-            st.markdown(f"- [{name}]({link})")
-
-    with col3:
-        st.markdown("#### 🛡️ Police")
-        for name, link in get_nearby_services(lat, lon, "police"):
-            st.markdown(f"- [{name}]({link})")
-
+    for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🛡️ Police"]):
+        with col:
+            st.markdown(f"#### {label}")
+            for name, link, _, _ in get_nearby_services(lat, lon, service_type):
+                st.markdown(f"- [{name}]({link})")
 else:
     st.error("❌ Satellite image could not be fetched.")
