@@ -10,8 +10,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import folium
 from streamlit_folium import st_folium
 from streamlit_extras.colored_header import colored_header
-from branca.element import MacroElement
-from jinja2 import Template
+from branca.element import MacroElement, Template, JavascriptLink
 
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
@@ -74,25 +73,38 @@ def get_nearby_services(lat, lon, service_type):
         services.append((name, maps_link))
     return services
 
-# Map Legend
+# Interactive Legend with Toggle
 class Legend(MacroElement):
     def __init__(self):
         super().__init__()
         self._template = Template("""
         {% macro html(this, kwargs) %}
-        <div style='position: fixed; 
-                    bottom: 50px; left: 50px; width: 200px; height: 120px; 
-                    background-color: rgba(0, 0, 0, 0.6); 
-                    z-index:9999; 
-                    font-size:14px; 
-                    color: white; 
-                    padding: 10px; 
-                    border-radius: 8px;'>
-            <b>Map Legend</b><br>
-            🔴 Wildfire<br>
-            🔵 Fire Station<br>
-            🏥 Hospital<br>
-            🚔 Police
+        <style>
+        .legend-toggle {
+            position: fixed;
+            bottom: 50px;
+            left: 50px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 9999;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .legend-details {
+            display: none;
+            margin-top: 10px;
+        }
+        </style>
+        <div class="legend-toggle" onclick="document.getElementById('legend-details').style.display = (document.getElementById('legend-details').style.display === 'none') ? 'block' : 'none'">
+            <b>Map Legend</b>
+            <div id="legend-details" class="legend-details">
+                🔴 Wildfire<br>
+                🔵 Fire Station<br>
+                🏥 Hospital<br>
+                🚔 Police
+            </div>
         </div>
         {% endmacro %}
         """)
