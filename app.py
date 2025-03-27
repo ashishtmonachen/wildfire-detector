@@ -14,16 +14,6 @@ from streamlit_extras.colored_header import colored_header
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
 
-# 🔻 Full background image styling
-st.markdown("""
-    <style>
-        .stApp {
-            background: url('https://i.imgur.com/jzDDVfI.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
 colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
 
 # API Keys
