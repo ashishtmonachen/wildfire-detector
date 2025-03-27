@@ -18,8 +18,8 @@ colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monito
 rain(emoji="🔥", font_size=54, falling_speed=7, animation_length="infinite")
 
 # API Keys
-GOOGLE_API_KEY = "YOUR_GOOGLE_API_KEY"
-NASA_API_KEY = "YOUR_NASA_API_KEY"
+GOOGLE_API_KEY = "AIzaSyBFJsMwO6dzcBaFNf3U51yNiGOMDz5oNeo"
+NASA_API_KEY = "sE98DPEqgN0f7dfmi14gEpcPqE2LNeK4JCIgNk7Z"
 
 @st.cache_resource
 
