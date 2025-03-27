@@ -14,6 +14,16 @@ from streamlit_extras.colored_header import colored_header
 # Sci-fi Theme Setup
 st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
 
+# 🔻 Background styling
+st.markdown("""
+    <style>
+        .stApp {
+            background: linear-gradient(135deg, #0f0f0f 30%, #1e1e1e 100%);
+            color: white;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires on Earth", color_name="red-70")
 
 # API Keys
@@ -90,11 +100,25 @@ if os.path.exists("wildfire_real_time.jpg"):
                 attr="Map data © [OpenStreetMap](https://www.openstreetmap.org) contributors"
             )
             folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red")).add_to(m)
+
+            legend_html = '''
+             <div style="position: fixed;
+             bottom: 50px; left: 50px; width: 160px; height: 90px;
+             background-color: rgba(0, 0, 0, 0.7);
+             border:2px solid white; z-index:9999; font-size:14px;
+             color: white; padding: 10px;">
+             <b>Legend</b><br>
+             🔴 Detected Wildfire<br>
+             📍 Emergency Service
+             </div>
+            '''
+            m.get_root().html.add_child(folium.Element(legend_html))
+
             st_folium(m, width=600, height=400)
 
         with col2:
             st.markdown("### 🛰️ Satellite Image")
-            st.image("wildfire_real_time.jpg", use_column_width=True, caption="Live NASA Feed")
+            st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
 
     st.markdown("## 🧠 AI Prediction")
     result = predict()
