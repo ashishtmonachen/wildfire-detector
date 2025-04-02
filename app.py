@@ -13,7 +13,7 @@ from streamlit_extras.colored_header import colored_header
 from branca.element import MacroElement, Template
 
 # Sci-fi Theme Setup
-st.set_page_config(page_title="🚁️ Wildfire Sentinel AI", layout="wide")
+st.set_page_config(page_title="🚀 Wildfire Sentinel AI", layout="wide")
 colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires in the USA", color_name="red-70")
 
 # API Keys
@@ -37,15 +37,24 @@ except ValueError:
 
 # Fetch satellite image
 @st.cache_data
-def fetch_satellite_image(lat, lon):
-    for days_ago in range(10):
-        date = (datetime.utcnow() - timedelta(days=days_ago)).strftime("%Y-%m-%d")
-        url = f"https://api.nasa.gov/planetary/earth/imagery?lon={lon}&lat={lat}&dim=0.2&date={date}&api_key={NASA_API_KEY}"
-        response = requests.get(url)
-        if response.status_code == 200 and "image" in response.headers.get("Content-Type", ""):
-            with open("wildfire_real_time.jpg", "wb") as f:
-                f.write(response.content)
-            return date
+def fetch_satellite_image(lat, lon, retries=2):
+    for attempt in range(retries):
+        for days_ago in range(10):
+            date = (datetime.utcnow() - timedelta(days=days_ago)).strftime("%Y-%m-%d")
+            url = f"https://api.nasa.gov/planetary/earth/imagery?lon={lon}&lat={lat}&dim=0.2&date={date}&api_key={NASA_API_KEY}"
+            response = requests.get(url)
+            content_type = response.headers.get("Content-Type", "")
+
+            if response.status_code == 200 and "image" in content_type:
+                with open("wildfire_real_time.jpg", "wb") as f:
+                    f.write(response.content)
+
+                if os.path.exists("wildfire_real_time.jpg") and os.path.getsize("wildfire_real_time.jpg") > 10000:
+                    return date
+                else:
+                    os.remove("wildfire_real_time.jpg")
+                    print("🩹 Corrupted image deleted. Retrying...")
+
     return None
 
 date_captured = fetch_satellite_image(lat, lon)
@@ -85,8 +94,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st.metric(label="Captured Date", value=date_captured)
 
             m = folium.Map(location=[lat, lon], zoom_start=6)
-            wildfire_marker = folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red"))
-            wildfire_marker.add_to(m)
+            folium.Marker([lat, lon], tooltip="Detected Wildfire", icon=folium.Icon(color="red")).add_to(m)
 
             for service_type, icon_color in zip(["fire_station", "hospital", "police"], ["blue", "green", "purple"]):
                 services = get_nearby_services(lat, lon, service_type)
@@ -95,12 +103,12 @@ if os.path.exists("wildfire_real_time.jpg"):
 
             legend_html = '''
                 <div id="map-legend" style="position: fixed; bottom: 50px; left: 50px; z-index:9999; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; color: white;">
-                    <b onclick=\"document.querySelector('#map-legend-details').style.display=(document.querySelector('#map-legend-details').style.display=='none'?'block':'none')\" style='cursor: pointer;'>Map Legend ⭟</b>
+                    <b onclick=\"document.querySelector('#map-legend-details').style.display=(document.querySelector('#map-legend-details').style.display=='none'?'block':'none')\" style='cursor: pointer;'>Map Legend ⮟</b>
                     <div id="map-legend-details" style="display:none; margin-top: 5px;">
                         🔴 Wildfire<br>
                         🔵 Fire Station<br>
                         🏥 Hospital<br>
-                        🚔 Police
+                        🛤️ Police
                     </div>
                 </div>
             '''
@@ -111,8 +119,11 @@ if os.path.exists("wildfire_real_time.jpg"):
             st_folium(m, width=600, height=400)
 
         with col2:
-            st.markdown("### 🚁️ Satellite Image")
-            st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
+            st.markdown("### 🚁 Satellite Image")
+            if os.path.exists("wildfire_real_time.jpg") and os.path.getsize("wildfire_real_time.jpg") > 10000:
+                st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
+            else:
+                st.warning("⚠️ No valid satellite image available.")
 
     st.markdown("## 🧠 Model Prediction")
     result = predict()
@@ -131,7 +142,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     st.markdown("## 🚨 Nearby Emergency Services")
     col1, col2, col3 = st.columns(3)
 
-    for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🚲 Police"]):
+    for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🛡️ Police"]):
         with col:
             st.markdown(f"#### {label}")
             for name, link, _, _ in get_nearby_services(lat, lon, service_type):
