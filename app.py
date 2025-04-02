@@ -85,7 +85,7 @@ def get_nearby_services(lat, lon, service_type):
 # Main Display
 if os.path.exists("wildfire_real_time.jpg"):
     with st.container():
-        st.markdown("## 🌍 Location Intelligence")
+        st.markdown("## Location Intelligence")
         col1, col2 = st.columns(2)
 
         with col1:
@@ -119,13 +119,13 @@ if os.path.exists("wildfire_real_time.jpg"):
             st_folium(m, width=600, height=400)
 
         with col2:
-            st.markdown("### 🚁 Satellite Image")
+            st.markdown("### Satellite Image")
             if os.path.exists("wildfire_real_time.jpg") and os.path.getsize("wildfire_real_time.jpg") > 10000:
                 st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
             else:
                 st.warning("⚠️ No valid satellite image available.")
 
-    st.markdown("## 🧠 Model Prediction")
+    st.markdown("## Model Prediction")
     result = predict()
     st.success(result)
 
@@ -139,7 +139,7 @@ if os.path.exists("wildfire_real_time.jpg"):
 - **Responders**: `{selected_fire.get('response_units', 'N/A')}`
 """)
 
-    st.markdown("## 🚨 Nearby Emergency Services")
+    st.markdown("## Nearby Emergency Services")
     col1, col2, col3 = st.columns(3)
 
     for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🛡️ Police"]):
