@@ -10,10 +10,10 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import folium
 from streamlit_folium import st_folium
 from streamlit_extras.colored_header import colored_header
-from branca.element import MacroElement, Template, JavascriptLink
+from branca.element import MacroElement, Template
 
 # Sci-fi Theme Setup
-st.set_page_config(page_title="🛰️ Wildfire Sentinel AI", layout="wide")
+st.set_page_config(page_title="🚁️ Wildfire Sentinel AI", layout="wide")
 colored_header("WILDFIRE DETECTION SYSTEM", description="Sentinel AI v2.7 Monitoring Active Fires in the USA", color_name="red-70")
 
 # API Keys
@@ -93,10 +93,9 @@ if os.path.exists("wildfire_real_time.jpg"):
                 for name, link, s_lat, s_lon in services:
                     folium.Marker([s_lat, s_lon], popup=name, icon=folium.Icon(color=icon_color)).add_to(m)
 
-            # Add interactive legend
             legend_html = '''
                 <div id="map-legend" style="position: fixed; bottom: 50px; left: 50px; z-index:9999; background: rgba(0,0,0,0.6); padding: 10px; border-radius: 8px; color: white;">
-                    <b onclick=\"document.querySelector('#map-legend-details').style.display=(document.querySelector('#map-legend-details').style.display=='none'?'block':'none')\" style='cursor: pointer;'>Map Legend ⮟</b>
+                    <b onclick=\"document.querySelector('#map-legend-details').style.display=(document.querySelector('#map-legend-details').style.display=='none'?'block':'none')\" style='cursor: pointer;'>Map Legend ⭟</b>
                     <div id="map-legend-details" style="display:none; margin-top: 5px;">
                         🔴 Wildfire<br>
                         🔵 Fire Station<br>
@@ -112,7 +111,7 @@ if os.path.exists("wildfire_real_time.jpg"):
             st_folium(m, width=600, height=400)
 
         with col2:
-            st.markdown("### 🛰️ Satellite Image")
+            st.markdown("### 🚁️ Satellite Image")
             st.image("wildfire_real_time.jpg", use_container_width=True, caption="Live NASA Feed")
 
     st.markdown("## 🧠 Model Prediction")
@@ -132,7 +131,7 @@ if os.path.exists("wildfire_real_time.jpg"):
     st.markdown("## 🚨 Nearby Emergency Services")
     col1, col2, col3 = st.columns(3)
 
-    for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🛡️ Police"]):
+    for col, service_type, label in zip([col1, col2, col3], ["fire_station", "hospital", "police"], ["🚒 Fire Stations", "🏥 Hospitals", "🚲 Police"]):
         with col:
             st.markdown(f"#### {label}")
             for name, link, _, _ in get_nearby_services(lat, lon, service_type):
